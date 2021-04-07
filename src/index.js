@@ -8,6 +8,7 @@ var usersRouter = require('./routes/users');
 var productsRouter = require('./routes/products');
 var ordersRouter = require('./routes/orders');
 var ordersDetailRouter = require('./routes/orders_detail');
+var appointmentsRouter = require('./routes/appointments');
 
 // Settings
 app.set('port', process.env.port || 3000);
@@ -26,6 +27,7 @@ app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 app.use('/orders', ordersRouter);
 app.use('/orders_detail', ordersDetailRouter);
+app.use('/appointments', appointmentsRouter);
 
 // Starting the server
 app.listen(app.get('port'), () => {
