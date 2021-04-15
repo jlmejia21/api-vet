@@ -13,6 +13,8 @@ router.get('/', (req, res) => {
     })
 })
 
+
+
 router.get('/:id', (req, res) => {
     const { id } = req.params;
     mysqlConnection.query('SELECT * FROM user WHERE iduser = ?', [id], (err, rows, fields) => {
@@ -83,6 +85,17 @@ router.post('/login', (req, res) => {
                 console.log(err);
             }
         });
+})
+
+router.get('/userType/:id', (req, res) => {
+    const { id } = req.params;
+    mysqlConnection.query('SELECT * FROM user where  tipo_usuario = ?', [id], (err, rows, fields) => {
+        if (!err) {
+            res.json(rows);
+        } else {
+            console.log(err);
+        }
+    })
 })
 
 module.exports = router;
