@@ -2,13 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const AWS = require('aws-sdk');
-const ID = 'AKIA4CEBQET7LCVUY4NG';
-const SECRET = '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';
-const BUCKET_NAME = 'bucket-api-vet-productos';
+
 
 const s3 = new AWS.S3({
-    accessKeyId: ID,
-    secretAccessKey: SECRET,
+    accessKeyId: process.env.AWS_ID,
+    secretAccessKey: process.env.AWS_SECRET,
     // signatureVersion: 'v4',
     // region: 'us-east-2',
 });
@@ -20,7 +18,7 @@ router.post('/upload', (req, res) => {
     }
     const key = formatDateYYYMMddHHMMSS(new Date()) + req.files.image.name;
     const params = {
-        Bucket: BUCKET_NAME,
+        Bucket: process.env.AWS_BUCKET_NAME,
         Key: key,
         Body: req.files.image.data
     };
@@ -43,7 +41,7 @@ router.get('/image/:id', (req, res) => {
         id
     } = req.params;
     s3.getObject({
-        Bucket: BUCKET_NAME,
+        Bucket: process.env.AWS_BUCKET_NAME,
         Key: id
     }, (error, data) => {
         if (error) {
@@ -62,7 +60,7 @@ router.delete('/image/:id', (req, res) => {
         id
     } = req.params;
     s3.deleteObject({
-        Bucket: BUCKET_NAME,
+        Bucket: process.env.AWS_BUCKET_NAME,
         Key: id
     }, (error, data) => {
         if (error) {

@@ -4,6 +4,7 @@ const router = express.Router();
 const path = require('path');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+require('dotenv').config();
 
 var employeesRouter = require('./routes/employees');
 var usersRouter = require('./routes/users');
@@ -14,15 +15,18 @@ var appointmentsRouter = require('./routes/appointments');
 var awsRouter = require('./routes/aws');
 
 // Settings
-app.set('port', process.env.port || 3000);
+// app.set('port', process.env.port || 3000);
+app.set('port', process.env.PORT);
 
 // Middlewares
 app.use(fileUpload());
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({
+    extended: true
+}));
 //Routes
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 app.use('/', router);
