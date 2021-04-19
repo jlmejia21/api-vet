@@ -14,7 +14,9 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-    const { id } = req.params;
+    const {
+        id
+    } = req.params;
     mysqlConnection.query('SELECT * FROM product WHERE idproduct = ?', [id], (err, rows, fields) => {
         if (!err) {
             res.json(rows[0]);
@@ -25,11 +27,18 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    const { nombre, descripcion, precio, imgUrl } = req.body;
+    const {
+        nombre,
+        descripcion,
+        precio,
+        imgUrl
+    } = req.body;
     mysqlConnection.query(`INSERT INTO product(nombre, descripcion, precio, imgUrl) values (?,?,?,?)`, [nombre, descripcion, precio, imgUrl],
         (err, rows, fields) => {
             if (!err) {
-                res.status(201).json({ status: 'Product saved' });
+                res.status(201).json({
+                    status: 'Product saved'
+                });
             } else {
                 console.log(err);
             }
@@ -37,26 +46,39 @@ router.post('/', (req, res) => {
 })
 
 router.put('/', (req, res) => {
-    const { idproduct, nombre, descripcion, precio, imgUrl } = req.body;
-    mysqlConnection.query(`UPDATE product set nombre = ? , descripcion = ?, precio = ?, imgUrl =? , idproduct = ? `, [nombre, descripcion, precio, imgUrl, idproduct],
+    const {
+        idproduct,
+        nombre,
+        descripcion,
+        precio,
+        imgUrl
+    } = req.body;
+    mysqlConnection.query(`UPDATE product set nombre = ? , descripcion = ?, precio = ?, imgUrl =?  where idproduct = ? `, [nombre, descripcion, precio, imgUrl, idproduct],
         (err, rows, fields) => {
             if (!err) {
-                res.json({ status: 'Product updated' });
+                res.json({
+                    status: 'Product updated'
+                });
             } else {
                 console.log(err);
             }
         });
 })
 router.delete('/:id', (req, res) => {
-    const { id } = req.params;
+    const {
+        id
+    } = req.params;
     mysqlConnection.query('DELETE  FROM product WHERE idproduct = ?', [id], (err, rows, fields) => {
         if (!err) {
-            res.json({ status: 'Product deleted' });
+            res.json({
+                status: 'Product deleted'
+            });
         } else {
             console.log(err);
         }
     })
 })
+
 
 
 module.exports = router;
