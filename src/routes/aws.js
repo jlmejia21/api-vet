@@ -32,7 +32,7 @@ router.post('/upload', (req, res) => {
         console.log(`File uploaded successfully. ${data.Location}`);
     });
     res.json({
-        status: 'File uploaded  successfully',
+        status: 'File uploaded  successfully!!!',
         id: key
     });
 });
