@@ -1,19 +1,18 @@
-const express = require('express');
-const router = express.Router();
+const {
+    response,
+    request
+} = require('express');
+const mysqlConnection = require('../database/config');
 
-const mysqlConnection = require('../database');
-
-router.get('/', (req, res) => {
+const productsGet = (req = request, res = response) => {
     mysqlConnection.query('SELECT * FROM product', (err, rows, fields) => {
-        if (!err) {
+        if (!err)
             res.json(rows);
-        } else {
+        else
             console.log(err);
-        }
     })
-})
-
-router.get('/:id', (req, res) => {
+}
+const productsGetById = (req = request, res = response) => {
     const {
         id
     } = req.params;
@@ -24,9 +23,8 @@ router.get('/:id', (req, res) => {
             console.log(err);
         }
     })
-})
-
-router.post('/', (req, res) => {
+}
+const productsPost = (req = request, res = response) => {
     const {
         nombre,
         descripcion,
@@ -35,17 +33,15 @@ router.post('/', (req, res) => {
     } = req.body;
     mysqlConnection.query(`INSERT INTO product(nombre, descripcion, precio, imgUrl) values (?,?,?,?)`, [nombre, descripcion, precio, imgUrl],
         (err, rows, fields) => {
-            if (!err) {
+            if (!err)
                 res.status(201).json({
                     status: 'Product saved'
                 });
-            } else {
+            else
                 console.log(err);
-            }
         });
-})
-
-router.put('/', (req, res) => {
+}
+const productsPut = (req = request, res = response) => {
     const {
         idproduct,
         nombre,
@@ -55,30 +51,35 @@ router.put('/', (req, res) => {
     } = req.body;
     mysqlConnection.query(`UPDATE product set nombre = ? , descripcion = ?, precio = ?, imgUrl =?  where idproduct = ? `, [nombre, descripcion, precio, imgUrl, idproduct],
         (err, rows, fields) => {
-            if (!err) {
+            if (!err)
                 res.json({
                     status: 'Product updated'
                 });
-            } else {
+            else
                 console.log(err);
-            }
+
         });
-})
-router.delete('/:id', (req, res) => {
+
+}
+const productsDelete = (req = request, res = response) => {
     const {
         id
     } = req.params;
     mysqlConnection.query('DELETE  FROM product WHERE idproduct = ?', [id], (err, rows, fields) => {
-        if (!err) {
+        if (!err)
             res.json({
                 status: 'Product deleted'
             });
-        } else {
+        else
             console.log(err);
-        }
+
     })
-})
 
-
-
-module.exports = router;
+}
+module.exports = {
+    productsGet,
+    productsGetById,
+    productsPost,
+    productsPut,
+    productsDelete
+}

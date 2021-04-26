@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const mysqlConnection = require('../database');
+const mysqlConnection = require('../database/config');
 
 router.get('/', (req, res) => {
     mysqlConnection.query('SELECT * FROM employee', (err, rows, fields) => {
@@ -14,7 +14,9 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-    const { id } = req.params;
+    const {
+        id
+    } = req.params;
     mysqlConnection.query('SELECT * FROM employee WHERE id = ?', [id], (err, rows, fields) => {
         if (!err) {
             res.json(rows[0]);
