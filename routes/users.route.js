@@ -17,7 +17,6 @@ router.post('/', usersPost);
 router.put('/', usersPut);
 router.delete('/:id', usersDelete);
 router.post('/login', usersLogin);
-
 router.get('/userType/:id', usersGetUserType)
 
 module.exports = router;

@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "nodemon app.js",
         "start": "node app.js",
-        "stop": "pkill --signal SIGINT src/index.js"
+        "stop": "pkill --signal SIGINT app.js"
     },
     "keywords": [],
     "author": "",

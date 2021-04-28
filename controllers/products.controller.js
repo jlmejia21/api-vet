@@ -2,10 +2,10 @@ const {
     response,
     request
 } = require('express');
-const mysqlConnection = require('../database/config');
+const db = require('../database/config');
 
 const productsGet = (req = request, res = response) => {
-    mysqlConnection.query('SELECT * FROM product', (err, rows, fields) => {
+    db.query('SELECT * FROM product', (err, rows, fields) => {
         if (!err)
             res.json(rows);
         else
@@ -16,7 +16,7 @@ const productsGetById = (req = request, res = response) => {
     const {
         id
     } = req.params;
-    mysqlConnection.query('SELECT * FROM product WHERE idproduct = ?', [id], (err, rows, fields) => {
+    db.query('SELECT * FROM product WHERE idproduct = ?', [id], (err, rows, fields) => {
         if (!err) {
             res.json(rows[0]);
         } else {
@@ -31,7 +31,7 @@ const productsPost = (req = request, res = response) => {
         precio,
         imgUrl
     } = req.body;
-    mysqlConnection.query(`INSERT INTO product(nombre, descripcion, precio, imgUrl) values (?,?,?,?)`, [nombre, descripcion, precio, imgUrl],
+    db.query(`INSERT INTO product(nombre, descripcion, precio, imgUrl) values (?,?,?,?)`, [nombre, descripcion, precio, imgUrl],
         (err, rows, fields) => {
             if (!err)
                 res.status(201).json({
@@ -49,7 +49,7 @@ const productsPut = (req = request, res = response) => {
         precio,
         imgUrl
     } = req.body;
-    mysqlConnection.query(`UPDATE product set nombre = ? , descripcion = ?, precio = ?, imgUrl =?  where idproduct = ? `, [nombre, descripcion, precio, imgUrl, idproduct],
+    db.query(`UPDATE product set nombre = ? , descripcion = ?, precio = ?, imgUrl =?  where idproduct = ? `, [nombre, descripcion, precio, imgUrl, idproduct],
         (err, rows, fields) => {
             if (!err)
                 res.json({
@@ -59,22 +59,19 @@ const productsPut = (req = request, res = response) => {
                 console.log(err);
 
         });
-
 }
 const productsDelete = (req = request, res = response) => {
     const {
         id
     } = req.params;
-    mysqlConnection.query('DELETE  FROM product WHERE idproduct = ?', [id], (err, rows, fields) => {
+    db.query('DELETE  FROM product WHERE idproduct = ?', [id], (err, rows, fields) => {
         if (!err)
             res.json({
                 status: 'Product deleted'
             });
         else
             console.log(err);
-
     })
-
 }
 module.exports = {
     productsGet,

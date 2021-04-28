@@ -35,6 +35,6 @@ app.get('*', (req, res) => {
     res.send('404|Page not found')
 })
 // Starting the server
-app.listen(process.env.port, () => {
-    console.log('Server on port', process.env.port);
+app.listen(process.env.PORT, () => {
+    console.log('Server on port', process.env.PORT);
 });

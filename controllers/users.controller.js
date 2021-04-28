@@ -2,13 +2,20 @@ const {
     response,
     request
 } = require('express');
-const mysqlConnection = require('../database/config');
+const db = require('../database/config');
 
 const usersGet = (req = request, res = response) => {
-    mysqlConnection.query('SELECT * FROM user', (err, rows, fields) => {
-        if (!err)
-            res.json(rows);
-        else
+    db.query('SELECT * FROM user', (err, rows, fields) => {
+        if (!err) {
+            let users = [];
+            if (rows.length > 0) {
+                users = rows.map(({
+                    password,
+                    ...resto
+                }) => resto);
+            }
+            res.json(users);
+        } else
             console.log(err);
     })
 }
@@ -16,7 +23,7 @@ const usersGetById = (req = request, res = response) => {
     const {
         id
     } = req.params;
-    mysqlConnection.query('SELECT * FROM user WHERE iduser = ?', [id], (err, rows, fields) => {
+    db.query('SELECT * FROM user WHERE iduser = ?', [id], (err, rows, fields) => {
         if (!err)
             res.json(rows[0]);
         else
@@ -31,7 +38,7 @@ const usersPost = (req = request, res = response) => {
         apellidos,
         tipo_usuario
     } = req.body;
-    mysqlConnection.query(`INSERT INTO user(username,password,nombres,apellidos,tipo_usuario) values (?,?,?,?,?)`,
+    db.query(`INSERT INTO user(username,password,nombres,apellidos,tipo_usuario) values (?,?,?,?,?)`,
         [username, password, nombres, apellidos, tipo_usuario],
         (err, rows, fields) => {
             if (!err)
@@ -51,7 +58,7 @@ const usersPut = (req = request, res = response) => {
         tipo_usuario,
         iduser
     } = req.body;
-    mysqlConnection.query(`update user set username=?,password=?,nombres=?,apellidos=?,tipo_usuario=? where iduser=?`, [username, password, nombres, apellidos, tipo_usuario, iduser],
+    db.query(`update user set username=?,password=?,nombres=?,apellidos=?,tipo_usuario=? where iduser=?`, [username, password, nombres, apellidos, tipo_usuario, iduser],
         (err, rows, fields) => {
             if (!err) {
                 res.json({
@@ -66,7 +73,7 @@ const usersDelete = (req = request, res = response) => {
     const {
         id
     } = req.params;
-    mysqlConnection.query(`delete from user where iduser=?`, [id],
+    db.query(`delete from user where iduser=?`, [id],
         (err, rows, fields) => {
             if (!err) {
                 res.json({
@@ -84,7 +91,7 @@ const usersLogin = (req = request, res = response) => {
         username,
         password
     } = req.body;
-    mysqlConnection.query(` SELECT * FROM user where username = ? and password = ?`, [username, password],
+    db.query(` SELECT * FROM user where username = ? and password = ?`, [username, password],
         (err, rows, fields) => {
             if (!err) {
                 if (rows.length == 0) {
@@ -94,6 +101,7 @@ const usersLogin = (req = request, res = response) => {
                         message: "Usuario o clave incorrectos"
                     })
                 } else {
+
                     res.json({
                         status: 'success',
                         user: rows[0],
@@ -111,10 +119,17 @@ const usersGetUserType = (req = request, res = response) => {
     const {
         id
     } = req.params;
-    mysqlConnection.query('SELECT * FROM user where  tipo_usuario = ?', [id], (err, rows, fields) => {
-        if (!err)
-            res.json(rows);
-        else
+    db.query('SELECT * FROM user where  tipo_usuario = ?', [id], (err, rows, fields) => {
+        if (!err) {
+            let users = [];
+            if (rows.length > 0) {
+                users = rows.map(({
+                    password,
+                    ...resto
+                }) => resto);
+            }
+            res.json(users);
+        } else
             console.log(err);
     })
 
