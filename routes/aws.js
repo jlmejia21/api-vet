@@ -62,6 +62,7 @@ router.get('/image/:id', (req, res) => {
     });
 
 });
+
 router.delete('/image/:id', (req, res) => {
     const {
         id

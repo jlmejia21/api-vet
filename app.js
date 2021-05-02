@@ -14,6 +14,9 @@ const employeesRouter = require('./routes/employees');
 const ordersDetailRouter = require('./routes/orders_detail');
 const appointmentsRouter = require('./routes/appointments');
 
+
+process.title = 'apiVet';
+
 // Middlewares
 app.use(fileUpload());
 app.use(cors());
