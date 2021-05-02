@@ -7,12 +7,12 @@ const fileUpload = require('express-fileupload');
 
 const usersRouter = require('./routes/users.route');
 const productsRouter = require('./routes/products.route');
+const ordersRouter = require('./routes/orders.route');
+const awsRouter = require('./routes/aws');
 
 const employeesRouter = require('./routes/employees');
-const ordersRouter = require('./routes/orders');
 const ordersDetailRouter = require('./routes/orders_detail');
 const appointmentsRouter = require('./routes/appointments');
-const awsRouter = require('./routes/aws');
 
 // Middlewares
 app.use(fileUpload());
@@ -25,12 +25,12 @@ app.use(express.urlencoded({
 app.use(express.static('public'))
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
+app.use('/orders', ordersRouter);
+app.use('/aws', awsRouter);
 
 app.use('/employees', employeesRouter);
-app.use('/orders', ordersRouter);
 app.use('/orders_detail', ordersDetailRouter);
 app.use('/appointments', appointmentsRouter);
-app.use('/aws', awsRouter);
 app.get('*', (req, res) => {
     res.send('404|Page not found')
 })

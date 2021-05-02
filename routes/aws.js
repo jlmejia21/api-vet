@@ -84,24 +84,21 @@ router.delete('/image/:id', (req, res) => {
 
 // EMAIL
 router.post('/email', (req, res) => {
+
     const {
-        idorden,
-        toEmail
+        idOrder,
+        toEmail,
+        productos
     } = req.body;
+
     let trData = '',
         total = 0;
-    const productos = [{
-        nombre: 'Producto 1',
-        cantidad: 10,
-        precio: 5.5,
-        subtotal: 55
-    }];
     productos.map(producto => {
-        total += producto.subtotal;
+        total += producto.cantidad * producto.precio;
         trData += getTr(producto);
     });
     const dataHtml = getDataHtml(trData, total);
-    const params = setParamsEmail(toEmail, dataHtml, idorden);
+    const params = setParamsEmail(toEmail, dataHtml, idOrder);
     new AWS.SES(SESConfig).sendEmail(params).promise().then((response) =>
         res.json({
             status: 'send email successfully!!!'
@@ -150,8 +147,8 @@ function getTr(producto) {
     trData += '<tr>';
     trData += `<td>${producto.nombre}</td>`;
     trData += `<td style="text-align: center;">${producto.cantidad}</td>`;
-    trData += `<td style="text-align: right;">${producto.precio} </td>`;
-    trData += `<td style="text-align: right;">${producto.subtotal} </td>`;
+    trData += `<td style="text-align: right;"> S/. ${producto.precio.toFixed(2)} </td>`;
+    trData += `<td style="text-align: right;"> S/. ${ Number(producto.cantidad * producto.precio).toFixed(2) } </td>`;
     trData += '</tr>';
     return trData
 }
@@ -166,7 +163,7 @@ function getDataHtml(trData, total) {
     dataHtml += trData;
     dataHtml += '</table>';
     dataHtml += '<br>';
-    dataHtml += `<div style="text-align: right;"><b>TOTAL : ${total} </b   ></div>`;
+    dataHtml += `<div style="text-align: right;"><b>TOTAL :  S/. ${total.toFixed(2)} </b   ></div>`;
     return dataHtml;
 }
 
@@ -210,4 +207,6 @@ function formatDateYYYMMddHHMMSS(d) {
         seconds = '0' + seconds;
     return [year, month, day].join('') + '' + [hour, minutes, seconds].join('');
 }
+
+
 module.exports = router;
